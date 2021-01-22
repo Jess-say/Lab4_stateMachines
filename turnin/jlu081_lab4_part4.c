@@ -21,7 +21,7 @@ void Door() {
 	switch(State) { //Transistion
 		case Start: // initial transition
 			B = 0x00;
-			State = Unlock;
+			State = Lock;
 			break;
 
 		case Lock:
