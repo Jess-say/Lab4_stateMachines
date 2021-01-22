@@ -14,6 +14,7 @@
 
 unsigned char B;
 unsigned char A, A7;
+unsigned char prev;
 
 enum States { Start, Lock, Unlock, Press2, Release2, PressY } State;
 
@@ -22,6 +23,7 @@ void Door() {
 		case Start: // initial transition
 			B = 0x00;
 			State = Lock;
+			prev = State;
 			break;
 
 		case Lock:
@@ -79,7 +81,13 @@ void Door() {
 			break;
 			
 		case PressY:
-			State = Unlock;
+			if (prev == Lock) {
+				State = Unlock;
+
+			}
+			else {
+				State= Lock;
+			}
 			break;
 
 		default:
