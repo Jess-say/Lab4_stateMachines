@@ -23,7 +23,6 @@ void Door() {
 		case Start: // initial transition
 			B = 0x00;
 			State = Lock;
-			prev = State;
 			break;
 
 		case Lock:
@@ -31,6 +30,7 @@ void Door() {
 
 			// if A2(#) and not A7
 			if ((A == 0x04) & !A7) {
+				prev = State;
 				State = Press2;
 			}
 			else {
@@ -45,6 +45,7 @@ void Door() {
 				State = Lock;
 			}
 			else if ((A == 0x04) & !A7) {
+				prev = State;
 				State = Press2;
 			}
 			else {
@@ -63,6 +64,7 @@ void Door() {
 				State = Release2;
 			}
 			else {
+				if (prev == Lock)
 				State = Lock;
 			}
 			break;
@@ -81,7 +83,12 @@ void Door() {
 			break;
 			
 		case PressY:
-			State= Lock;
+			if (prev == Lock) {
+				State= Lock;
+			}
+			else {
+				State = Unlock;
+			}
 			break;
 
 		default:
