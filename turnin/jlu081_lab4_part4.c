@@ -64,8 +64,12 @@ void Door() {
 				State = Release2;
 			}
 			else {
-				if (prev == Lock)
-				State = Lock;
+				if (prev == Lock) {
+					State = Lock;
+				}
+				else {
+					State = Unlock;
+				}
 			}
 			break;
 
@@ -78,15 +82,22 @@ void Door() {
 				State = Release2;
 			}
 			else {
-				State = Lock;
+				if (prev == Lock) {
+					State = Lock;
+				}
+				else {
+					State = Unlock;
+				}
 			}
 			break;
 			
 		case PressY:
 			if (prev == Lock) {
+				B = 0x01;
 				State= Lock;
 			}
 			else {
+				B = 0x00;
 				State = Unlock;
 			}
 			break;
