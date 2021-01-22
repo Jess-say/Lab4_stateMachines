@@ -99,34 +99,6 @@ void Door() {
 			}
 			break;
 
-		/*case Press2U:
-			if ((A == 0x04) & !A7) {
-				State = Press2U;
-			}
-			else if ((A == 0x00) & !A7) {
-				State = Release2U;
-			}
-			else {
-				State = Unlock;
-			}
-			break;
-
-		case Release2U:
-			if ((A == 0x04) & !A7) {
-				State = PressY2;
-			}
-			else if ((A == 0x00) &!A7) {
-				State = Release2U;
-			}
-			else {
-				State = Unlock;
-			}
-			break;
-
-		case PressY2:
-			State = Lock;
-			break;*/
-
 		default:
 			State = Start;
 			break;
