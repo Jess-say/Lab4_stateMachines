@@ -39,17 +39,14 @@ void Door() {
 			break;
 
 		case Unlock:
-			// if inside the house
-			if (A7) {
-				B = 0x00;
-				State = Lock;
-			}
-			else if ((A == 0x04) & !A7) {
+			if ((A == 0x04) & !A7) {
 				prev = State;
 				State = Press2;
 			}
+			else if (A7) {
+				State = Lock;
+			}
 			else {
-				B = 0x01;
 				State = Unlock;
 			}
 			break;
@@ -64,12 +61,12 @@ void Door() {
 				State = Release2;
 			}
 			else {
-				if (prev == Lock) {
-					State = Lock;
-				}
-				else {
+				//if (prev == Lock) {
+				//	State = Lock;
+				//}
+				//else {
 					State = Unlock;
-				}
+				//}
 			}
 			break;
 
@@ -82,12 +79,12 @@ void Door() {
 				State = Release2;
 			}
 			else {
-				if (prev == Lock) {
-					State = Lock;
-				}
-				else {
+				//if (prev == Lock) {
+				//	State = Lock;
+				//}
+				//else {
 					State = Unlock;
-				}
+				//}
 			}
 			break;
 			
