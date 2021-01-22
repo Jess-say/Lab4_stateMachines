@@ -2,7 +2,7 @@
  *  Partner(s) Name: 
  *	Lab Section: 23
  *	Assignment: Lab #4  Exercise #4
- *	Exercise Description: Continues part 3 and can also be locked by entering the code provided previously
+ *	Exercise Description: Continues from part 3, door can be locked by entering code from previous part
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
@@ -39,10 +39,12 @@ void Door() {
 			break;
 
 		case Unlock:
+			B = 0x01;
 			if ((A == 0x04) & !A7) {
-				prev = State;
+				prev  = State;
 				State = Press2;
 			}
+			// if inside the house
 			else if (A7) {
 				State = Lock;
 			}
@@ -61,12 +63,12 @@ void Door() {
 				State = Release2;
 			}
 			else {
-				//if (prev == Lock) {
-				//	State = Lock;
-				//}
-				//else {
+				if (prev == Lock) {
+					State = Lock;
+				}
+				else {
 					State = Unlock;
-				//}
+				}
 			}
 			break;
 
@@ -79,25 +81,51 @@ void Door() {
 				State = Release2;
 			}
 			else {
-				//if (prev == Lock) {
-				//	State = Lock;
-				//}
-				//else {
+				if (prev == Lock) {
+					State = Lock;
+				}
+				else {
 					State = Unlock;
-				//}
+				}
 			}
 			break;
 			
 		case PressY:
-			if (prev == Lock) {
-				B = 0x01;
-				State= Lock;
+			if (prev = Lock) {
+				State = Unlock;
 			}
 			else {
-				B = 0x00;
+				State = Lock;
+			}
+			break;
+
+		/*case Press2U:
+			if ((A == 0x04) & !A7) {
+				State = Press2U;
+			}
+			else if ((A == 0x00) & !A7) {
+				State = Release2U;
+			}
+			else {
 				State = Unlock;
 			}
 			break;
+
+		case Release2U:
+			if ((A == 0x04) & !A7) {
+				State = PressY2;
+			}
+			else if ((A == 0x00) &!A7) {
+				State = Release2U;
+			}
+			else {
+				State = Unlock;
+			}
+			break;
+
+		case PressY2:
+			State = Lock;
+			break;*/
 
 		default:
 			State = Start;
