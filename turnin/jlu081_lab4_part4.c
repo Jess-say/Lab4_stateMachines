@@ -37,15 +37,16 @@ void Door() {
 			break;
 
 		case Unlock:
-			B = 0x01;
 			// if inside the house
 			if (A7) {
+				B = 0x00;
 				State = Lock;
 			}
 			else if ((A == 0x04) & !A7) {
 				State = Press2;
 			}
 			else {
+				B = 0x01;
 				State = Unlock;
 			}
 			break;
