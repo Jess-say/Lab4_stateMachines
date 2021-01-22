@@ -91,7 +91,7 @@ void Door() {
 			break;
 			
 		case PressY:
-			if (prev = Lock) {
+			if (prev == Lock) {
 				State = Unlock;
 			}
 			else {
