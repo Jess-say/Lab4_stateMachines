@@ -18,7 +18,7 @@ unsigned char prev;
 unsigned char code, i, ACheck, j;
 unsigned char combo[] = { 0x04, 0x00, 0x01, 0x00 }; // array of 4 sequence
 
-enum States { Start, Lock, Unlock, Press, Release } State;
+enum States { Start, Lock, Unlock, Press, Release, PressY } State;
 
 void Door() {
 	switch(State) { //Transistion
