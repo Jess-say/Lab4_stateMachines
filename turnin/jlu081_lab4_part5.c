@@ -20,12 +20,6 @@ unsigned char combo[] = { 0x04, 0x00, 0x01, 0x00 }; // array of 4 sequence
 
 enum States { Start, Lock, Unlock, Press, Release } State;
 
-void /*char?*/ getCode(ACheck, j) {
-	for (i = 0; i < 4; i++) {
-
-	}
-}
-
 void Door() {
 	switch(State) { //Transistion
 		case Start: // initial transition
@@ -50,7 +44,7 @@ void Door() {
 			B = 0x01;
 			if ((A == 0x04) & !A7) {
 				prev  = State;
-				State = Press2;
+				State = Press;
 			}
 			// if inside the house
 			else if (A7) {
@@ -62,25 +56,11 @@ void Door() {
 			break;
 
 		case Press:
-
-			if () {
+			if ((A == 0x04) & !A7) {
 				State = Press;
 			}
-			else if (((A == 0x00) & !A7) || ((A == 0x02) & !A7) || ((A == 0x04) & !A7)) {
+			else if (((A == 0x00) & !A7) || ((A == 0x02) & !A7)) {
 				State = Release;
-			}
-			
-			 
-			break;
-
-		/*case Press2:
-			// if A2 and not A7
-			if ((A == 0x04) & !A7) {
-				State = Press2;
-			}
-			// if A is 0 and not A7
-			else if ((A == 0x00) & !A7) {
-				State = Release2;
 			}
 			else {
 				if (prev == Lock) {
@@ -92,13 +72,13 @@ void Door() {
 			}
 			break;
 
-		case Release2:
+		case Release:
 			// if A1 and not A7
-			if ((A == 0x02) & !A7) {
+			if ((A == 0x01) & !A7) {
 				State = PressY;
 			}
 			else if ((A == 0x00) & !A7) {
-				State = Release2;
+				State = Release;
 			}
 			else {
 				if (prev == Lock) {
@@ -117,7 +97,7 @@ void Door() {
 			else {
 				State = Lock;
 			}
-			break;*/
+			break;
 
 		default:
 			break;
