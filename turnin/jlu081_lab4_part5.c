@@ -21,9 +21,9 @@ unsigned char combo[] = { 0x04, 0x00, 0x01, 0x00 }; // array of 4 sequence
 enum States { Start, Lock, Unlock, Press, Release } State;
 
 void /*char?*/ getCode(ACheck, j) {
-	/*for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; i++) {
 
-	}*/
+	}
 }
 
 void Door() {
@@ -50,7 +50,7 @@ void Door() {
 			B = 0x01;
 			if ((A == 0x04) & !A7) {
 				prev  = State;
-				State = Press;
+				State = Press2;
 			}
 			// if inside the house
 			else if (A7) {
@@ -63,7 +63,7 @@ void Door() {
 
 		case Press:
 
-			//if () {
+			if () {
 				State = Press;
 			}
 			else if (((A == 0x00) & !A7) || ((A == 0x02) & !A7) || ((A == 0x04) & !A7)) {
