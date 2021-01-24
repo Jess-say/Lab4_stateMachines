@@ -95,7 +95,7 @@ void Button() {
 			else if (A == 0x02) {
 				State = Dec;
 			}
-			else if (A = 0x03) {
+			else if (A == 0x03) {
 				State = Reset;
 			}
 			else {
