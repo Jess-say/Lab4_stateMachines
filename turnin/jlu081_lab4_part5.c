@@ -15,8 +15,8 @@
 unsigned char B;
 unsigned char A, A7;
 unsigned char prev;
-unsigned char code, i, ACheck, j;
-unsigned char combo[] = { 0x04, 0x00, 0x01, 0x00 }; // array of 4 sequence
+unsigned char code, i, ACheck;
+unsigned char combo[] = { 0x04, 0x00, 0x01, 0x00 }; // array of size 3
 
 enum States { Start, Lock, Unlock, Press, Release, PressY } State;
 
@@ -24,6 +24,7 @@ void Door() {
 	switch(State) { //Transistion
 		case Start: // initial transition
 			B = 0x00;
+			i = 0;
 			State = Lock;
 			break;
 
@@ -32,6 +33,7 @@ void Door() {
 
 			// if A2(#) and not A7
 			if ((A == 0x04) & !A7) {
+				i++;
 				prev = State;
 				State = Press;
 			}
@@ -43,6 +45,7 @@ void Door() {
 		case Unlock:
 			B = 0x01;
 			if ((A == 0x04) & !A7) {
+				i++;
 				prev  = State;
 				State = Press;
 			}
@@ -60,6 +63,7 @@ void Door() {
 				State = Press;
 			}
 			else if (((A == 0x00) & !A7) || ((A == 0x02) & !A7)) {
+				i++;
 				State = Release;
 			}
 			else {
@@ -75,6 +79,7 @@ void Door() {
 		case Release:
 			// if A1 and not A7
 			if ((A == 0x01) & !A7) {
+				i++;
 				State = PressY;
 			}
 			else if ((A == 0x00) & !A7) {
@@ -116,7 +121,7 @@ int main(void) {
 		A = PINA & 0x07; // gets buttons X, Y and #
 		A7 = PINA & 0x80; // inside house button
 		//Door();
-		PORTB = B;
+		PORTB = i;
     	}
 
     	return 0;
