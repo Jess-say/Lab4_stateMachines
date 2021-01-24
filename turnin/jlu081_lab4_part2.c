@@ -141,11 +141,10 @@ int main(void) {
 	State = Start;
 
 	while (1) {
-		A = 0x03; // gets first and second bit
+		A = PINA & 0x03; // gets first and second bit
 		Button();
 		PORTC = C;
-    	}
-	
+    	}	
 
     	return 0;
 }
