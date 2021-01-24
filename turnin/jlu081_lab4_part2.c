@@ -130,6 +130,8 @@ void Button() {
 
 		default:
 			break;
+
+	}
 }
 
 int main(void) {
