@@ -13,9 +13,9 @@
 #endif
 
 unsigned char C = 0x07; // initially set to 7
-unsigned char A;
+unsigned char A, prev;
 
-enum States { Start, Wait, Inc, Dec, Depress, Reset } State;
+enum States { Start, Wait, Inc, Dec, Inc_Wait, Dec_Wait, Depress, Reset } State;
 
 void Button() {
 	switch(State) { //Transistion
@@ -26,11 +26,11 @@ void Button() {
 		case Wait:
 			// if A0 is pressed - increment
 			if (A == 0x01) {
-				State = Inc;
+				State = Inc_Wait;
 			}
 			// decrement if A1 is pressed
 			else if (A == 0x02) {
-				State = Dec;
+				State = Dec_Wait;
 			}
 			// if both A0 and A1 are pressed - reset
 			else if (A == 0x03) {
@@ -43,11 +43,12 @@ void Button() {
 			break;
 
 		case Inc:
+			prev = Inc;
 			if (A == 0x01) { 
 				State = Inc;
 			}
 			else if (A == 0x02) {
-				State = Dec;
+				State = Dec_Wait;
 			}
 			else if (A == 0x03) {
 				State = Reset;
@@ -59,7 +60,7 @@ void Button() {
 
 		case Dec:
 			if (A == 0x01) {
-				State = Inc;
+				State = Inc_Wait;
 			}
 			else if (A == 0x02) {
 				State = Dec;
@@ -72,15 +73,23 @@ void Button() {
 			}
 			break;
 
+		case Inc_Wait:
+			State = Inc;
+			break;
+
+		case Dec_Wait:
+			State = Dec;
+			break;
+
 		case Reset:
 			if (A == 0x00) {
 				State = Depress;
 			}
 			else if (A == 0x01) {
-				State = Inc;
+				State = Inc_Wait;
 			}
 			else if (A == 0x02) {
-				State = Dec;
+				State = Dec_Wait;
 			}
 
 			else {
@@ -90,10 +99,10 @@ void Button() {
 
 		case Depress:
 			if (A == 0x01) {
-				State = Inc;
+				State = Inc_Wait;
 			}
 			else if (A == 0x02) {
-				State = Dec;
+				State = Dec_Wait;
 			}
 			else if (A == 0x03) {
 				State = Reset;
@@ -112,13 +121,13 @@ void Button() {
 			C = 0x07; // Initially
 			break;
 
-		case Inc:
+		case Inc_Wait:
 			if (C < 9) {
 				C = C + 1;
 			}
 			break;
 
-		case Dec:
+		case Dec_Wait:
 			if (C > 0) {
 				C = C - 1;
 			}
