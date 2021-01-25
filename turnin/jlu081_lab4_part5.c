@@ -14,11 +14,10 @@
 
 unsigned char B;
 unsigned char A, A7;
-unsigned char prev;
-unsigned char code, i, ACheck;
+unsigned char i, prev;
 unsigned char combo[] = { 0x04, 0x00, 0x01, 0x00 }; // array of size 3
 
-enum States { Start, Lock, Unlock, Press, Release, PressY } State;
+enum States { Start, Lock, Unlock, Inc, Wait_Lock, Wait_Unlock } State;
 
 void Door() {
 	switch(State) { //Transistion
@@ -30,12 +29,11 @@ void Door() {
 
 		case Lock:
 			B = 0x00;
-
-			// if A2(#) and not A7
-			if ((A == 0x04) & !A7) {
-				i++;
-				prev = State;
-				State = Press;
+			i = 0; // MUST include in state
+			// if combo matches and not A7
+			if ((A == combo[i]) && !A7) {
+				prev = Lock;
+				State = Inc;
 			}
 			else {
 				State = Lock;
@@ -44,60 +42,70 @@ void Door() {
 
 		case Unlock:
 			B = 0x01;
-			if ((A == 0x04) & !A7) {
-				i++;
-				prev  = State;
-				State = Press;
+			i = 0; // MUST include
+			// if no buttons are pressed and not A7
+			if ((A == 0x00) && !A7) {
+				State = Unlock;
 			}
 			// if inside the house
 			else if (A7) {
 				State = Lock;
 			}
+			// if A matched combo
+			else if ((A == combo[i]) && !A7){
+				prev = Unlock;
+				State = Inc;
+			}
 			else {
 				State = Unlock;
 			}
 			break;
 
-		case Press:
-			if ((A == 0x04) & !A7) {
-				State = Press;
-			}
-			else if (((A == 0x00) & !A7) || ((A == 0x02) & !A7)) {
-				i++;
-				State = Release;
+		case Inc:
+			i = i + 1; // increment i for combo
+			// need two one for lock and one for unlock
+			if (prev == Lock) {
+				State = Wait_Unlock;
 			}
 			else {
-				if (prev == Lock) {
-					State = Lock;
-				}
-				else {
-					State = Unlock;
-				}
+				State = Wait_Lock;
 			}
 			break;
 
-		case Release:
-			// if A1 and not A7
-			if ((A == 0x01) & !A7) {
-				i++;
-				State = PressY;
+		case Wait_Lock:
+			// if 4 numbers of button sequence
+			// go from unlock to lock
+			if (i == 4) {
+				State = Lock;
 			}
-			else if ((A == 0x00) & !A7) {
-				State = Release;
+			else if (A == 0x00) {
+				State = Wait_Lock;
+			}
+			else if (A == combo[i]) {
+				prev = Unlock; // keep track so it goes to right inc
+				State = Inc;
+			}
+			else if ((A == combo[i - 1])) {
+				State = Wait_Lock;
 			}
 			else {
-				if (prev == Lock) {
-					State = Lock;
-				}
-				else {
-					State = Unlock;
-				}
+				State = Lock;
 			}
 			break;
 			
-		case PressY:
-			if (prev == Lock) {
+		case Wait_Unlock:
+			if (i == 4) {
 				State = Unlock;
+			}
+			else if (A == 0x00) {
+				State = Wait_Unlock;
+			}
+			else if (A == combo[i]) {
+				prev = Lock;
+				State = Inc;
+			}
+			else if (A == combo[i - 1]) {
+				State = Wait_Unlock;
 			}
 			else {
 				State = Lock;
@@ -120,8 +128,8 @@ int main(void) {
 	while (1) {
 		A = PINA & 0x07; // gets buttons X, Y and #
 		A7 = PINA & 0x80; // inside house button
-		//Door();
-		PORTB = i;
+		Door();
+		PORTB = B;
     	}
 
     	return 0;
