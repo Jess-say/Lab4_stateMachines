@@ -15,7 +15,7 @@
 unsigned char B;
 unsigned char A, A7;
 unsigned char i, prev;
-unsigned char combo[] = { 0x04, 0x00, 0x01, 0x00 }; // array of size 3
+unsigned char combo[] = { 0x04, 0x01, 0x02, 0x01 }; // array of size 3
 
 enum States { Start, Lock, Unlock, Inc, Wait_Lock, Wait_Unlock } State;
 
