@@ -35,6 +35,9 @@ void Door() {
 				prev = Lock;
 				State = Inc;
 			}
+			else if ((A == 0x00) && !A7) {
+				State = Lock;
+			}
 			else {
 				State = Lock;
 			}
@@ -75,10 +78,7 @@ void Door() {
 		case Wait_Lock:
 			// if 4 numbers of button sequence
 			// go from unlock to lock
-			if (i == 4) {
-				State = Lock;
-			}
-			else if (A == 0x00) {
+			if (A == 0x00) {
 				State = Wait_Lock;
 			}
 			else if (A == combo[i]) {
@@ -88,16 +88,16 @@ void Door() {
 			else if ((A == combo[i - 1])) {
 				State = Wait_Lock;
 			}
+			else if (i == 4) {
+				State = Lock;
+			}
 			else {
 				State = Lock;
 			}
 			break;
 			
 		case Wait_Unlock:
-			if (i == 4) {
-				State = Unlock;
-			}
-			else if (A == 0x00) {
+			if (A == 0x00) {
 				State = Wait_Unlock;
 			}
 			else if (A == combo[i]) {
@@ -106,6 +106,9 @@ void Door() {
 			}
 			else if (A == combo[i - 1]) {
 				State = Wait_Unlock;
+			}
+			else if (i == 4) {
+				State = Unlock;
 			}
 			else {
 				State = Lock;
